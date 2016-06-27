@@ -18,27 +18,41 @@ class Entidade implements \Alfa\Abstracao\Entidade {
     }
     
     public function create($colunas, $valores) {
+        
         $sql = "insert into " . $this->getNome() . " (" . implode(',', $colunas).") values ('" . implode("','", $valores) . "')";
+        
         if (!mysqli_query($this->db->conexao, $sql)) {
+            
             throw new \Exception(mysqli_error($this->db->conexao));
+            
         } else {
+            
             echo "Dados gravados com sucesso";
         }
     }
 
     public function delete($clausula) {
+        
         $sql = "delete from " . $this->getNome() . " where " .$clausula;
+        
         if (!mysqli_query($this->db->conexao, $sql)) {
+            
             throw new \Exception(mysqli_error($this->db->conexao));
+            
         } else {
+            
             echo "Dados deletados com sucesso";
         }
     }
 
     public function retrieve($colunas, $clausula) {
+        
         $where = "";
+        
         if($clausula != "") {
+            
             $where = " where " . $clausula;
+            
         }
         
         $sql = "select " . implode(", ", $colunas) . " from " . $this->getNome() . $where;
@@ -46,12 +60,16 @@ class Entidade implements \Alfa\Abstracao\Entidade {
         $result = mysqli_query($this->db->conexao, $sql);
 
         if (!$result) {
+            
             echo "Não foi possível consultar: ($sql)" . mysqli_error();
+            
             exit;
         }
 
         if (mysqli_num_rows($result) == 0) {
+            
             echo "Linhas não encontradas";
+            
             exit;
         }
         
@@ -61,17 +79,27 @@ class Entidade implements \Alfa\Abstracao\Entidade {
     }
 
     public function update($colunas, $valores, $clausula) {
+        
         $novo = array_combine($colunas, $valores);
+        
         $update = array();
+        
         foreach ($novo as $key => $value) {
+            
             $update[] = $key . " = '" . $value . "'";
+            
         }
         
         $sql = "update produto set " . implode(", ", $update) . " where " . $clausula;
+        
         if (!mysqli_query($this->db->conexao, $sql)) {
+            
             throw new \Exception(mysqli_error($this->db->conexao));
+            
         } else {
+            
             echo "Dados alterados com sucesso";
+            
         }
     }
 

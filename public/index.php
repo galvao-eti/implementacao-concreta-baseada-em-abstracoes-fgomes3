@@ -8,9 +8,14 @@ use Alfa\BaseDeDados;
 $servidor = new SGBD;
 
 $servidor->setEndereco("127.0.0.1");
+
 $servidor->setPorta(3306);
+
 $servidor->setUsuario("root");
+
 $servidor->setSenha("");
+
+//------------------------------------------------------------------------------
 
 $db = new BaseDeDados("alfa", $servidor);
 
@@ -18,33 +23,41 @@ $Produto = new \Alfa\Produto($db);
 $Produto->setNome("produto");
 
 /* Create  */
-$arrayColunasCreate = array (
+$colunasCreate = array (
     'nome',
     'preco'
 );
 
-$arrayValoresCreate = array(
+$valoresCreate = array(
     "HD externo Seagate",
     530.00
 );
 
+//------------------------------------------------------------------------------
+
+
+
 try {
     $db->conectar();
-    $Produto->create($arrayColunasCreate, $arrayValoresCreate);
+    
+    $Produto->create($colunasCreate, $valoresCreate);
+    
 } catch (Exception $e) {
+    
     echo $e->getMessage();
+    
 }
 finally{
     $db->desconectar();
 }
 
 /* Update */
-$arrayColunasUpdate = array (
+$colunasUpdate = array (
     'nome',
     'preco'
 );
 
-$arrayValoresUpdate = array(
+$valoresUpdate = array(
     "HD externo Seagate",
     530.00
 );
@@ -52,32 +65,49 @@ $arrayValoresUpdate = array(
 $clausulaUpdate = "codigo = 1";
 
 try {
+    
     $db->conectar();
-    $Produto->update($arrayColunasUpdate, $arrayValoresUpdate, $clausulaUpdate);
+    
+    $Produto->update($colunasUpdate, $valoresUpdate, $clausulaUpdate);
+    
 } catch (Exception $e) {
+    
     echo $e->getMessage();
+    
 }
 finally{
+    
     $db->desconectar();
+    
 }
+
+
+//------------------------------------------------------------------------------
+
 
 /* Delete */
 
 $clausulaDelete = "codigo = 3";
 
 try {
+    
     $db->conectar();
+    
     $Produto->delete($clausulaDelete);
+    
 } catch (Exception $e) {
+    
     echo $e->getMessage();
+    
 }
 finally{
+    
     $db->desconectar();
 }
 
 /* Retrieve */
 
-$arrayColunasRetrieve= array (
+$colunasRetrieve= array (
     'codigo',
     'nome',
     'preco'
@@ -85,18 +115,27 @@ $arrayColunasRetrieve= array (
 
 $clausulaRetrieve = "codigo = 4";
 
+//------------------------------------------------------------------------------
+
+
 try {
+    
     $db->conectar();
-    $ret = $Produto->retrieve($arrayColunasRetrieve, $clausulaRetrieve);
     
-    foreach($ret as $key => $value) {
-        $html = "<ul>";
-        foreach($value as $idx => $val ){
-            $html .= "<li>" . $val . "</li>";
+    $dados = $Produto->retrieve($colunasRetrieve, $clausulaRetrieve);
+    
+    foreach($dados as $key => $value) {
+        
+        $buffer = "<ul>";
+        
+        foreach($value as $idx => $valor ){
+            
+            $buffer .= "<li>" . $valor . "</li>";
+            
         }
-        $html .= "</ul>";
+        $buffer .= "</ul>";
     
-        echo $html;
+        echo $buffer;
     }
     
     
